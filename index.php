@@ -45,7 +45,7 @@ $app->get('/cursos/:id', function($id) use ($app, $db) {
     $app->response()->header("Content-Type", "application/json");
     $curso = $db->cursos()->where('id', $id);
     $inscripciones = $db->inscripcion()->where('cursos_id', $id);
-    $alumnos = [];
+    $alumnos = array();
     foreach ($inscripciones as $i) {
         $alumnos[] = array(
             'id'=> $i->usuario['id'],
