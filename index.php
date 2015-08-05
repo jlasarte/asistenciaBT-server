@@ -3,17 +3,12 @@
 /* Require Slim and plugins */
 require 'Slim/Slim.php';
 require 'plugins/NotORM.php';
+require 'plugins/Spyc.php';
 
-/* Database Configuration */
-$dbhost   = 'localhost';
-$dbuser   = 'root';
-$dbpass   = '';
-$dbname   = 'movilesbluetooth';
-$dbmethod = 'mysql:dbname=';
-$charset = 'charset=utf8';
+$config = Spyc::YAMLLoad('config.yaml');
 
-$dsn = $dbmethod.$dbname.";".$charset;
-$pdo = new PDO($dsn, $dbuser, $dbpass);
+$dsn = $config["db"]["method"].$config["db"]["name"].";charset=".$config["db"]["charset"];
+$pdo = new PDO($dsn, $config["db"]["user"], $config["db"]["pass"]);
 $db = new NotORM($pdo);
 
 /* Register autoloader and instantiate Slim */

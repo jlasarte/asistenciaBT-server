@@ -1,0 +1,7 @@
+db:
+	host: 'localhost'
+	user: 'root'
+	pass: ''
+	name: 'movilesbluetooth'
+	method: 'mysql:dbname='
+	charset: 'utf8'
