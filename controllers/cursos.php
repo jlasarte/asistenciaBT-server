@@ -7,7 +7,7 @@ class Cursos extends Controller {
 	function  index() {
 
 		$cursos = array();
-    	foreach ($this->db->cursos() as $curso) {
+    	foreach ($this->db->curso() as $curso) {
 	        $cursos[]  = array(
 	            'id' => $curso['id'],
 	            'nombre' => $curso['nombre'],
@@ -23,7 +23,7 @@ class Cursos extends Controller {
 
 	function view($id) {
 		$this->app->response()->header("Content-Type", "application/json");
-    	$curso = $this->db->cursos()->where('id', $id);
+    	$curso = $this->db->curso()->where('id', $id);
     	$inscripciones = $this->db->inscripcion()->where('cursos_id', $id);
     	$alumnos = array();
     	
