@@ -20,58 +20,17 @@ $db = new NotORM($pdo);
 \Slim\Slim::registerAutoloader();
 $app = new \Slim\Slim();
 
-/* Routes */
+// Configuración de las rutas
 $app->get('/', function(){
     echo 'App BT';
 });
 
-// Get all cars
 $app->get('/cursos', function() use($app, $db){
-    $cursos = array();
-    foreach ($db->cursos() as $curso) {
-        $cursos[]  = array(
-            'id' => $curso['id'],
-            'nombre' => $curso['nombre'],
-            'descripccion' => $curso['descripccion'],
-            'horarios' => $curso['horarios'],
-            'profesor' => $curso->usuario['nombreusuario']
-        );
-    }
-    $app->response()->header("Content-Type", "application/json");
-    echo json_encode($cursos, JSON_FORCE_OBJECT);
+    (new \Controllers\Cursos($app, $db))->index();
 });
 
 $app->get('/cursos/:id', function($id) use ($app, $db) {
-    $app->response()->header("Content-Type", "application/json");
-    $curso = $db->cursos()->where('id', $id);
-    $inscripciones = $db->inscripcion()->where('cursos_id', $id);
-    $alumnos = array();
-    foreach ($inscripciones as $i) {
-        $alumnos[] = array(
-            'id'=> $i->usuario['id'],
-            'nombre'=> $i->usuario['nombre'],
-            'apellido'=> $i->usuario['apellido'],
-            'UUID'=> $i->usuario['UUID'],
-            'nombreusuario'=> $i->usuario['nombreusuario'],
-            );
-    }
-
-
-    if($data = $curso->fetch()){
-        echo json_encode(array(
-            'id' => $data['id'],
-            'nombre' => $data['nombre'],
-            'descripccion' => $data['descripccion'],
-            'horarios' => $data['horarios'],
-            'alumnos' => $alumnos
-        ));
-    }
-    else{
-        echo json_encode(array(
-            'status' => false,
-            'message' => "El curso $id no existe"
-        ));
-    }
+    (new \Controllers\Cursos($app, $db))->view($id);
 });
 
 /* Run the application */
