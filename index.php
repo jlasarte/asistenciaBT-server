@@ -43,6 +43,10 @@ $app->group('/alumnos', function() use ($app, $db) {
     $app->get('/:id/cursos', function($id) use ($app, $db) {
         (new \Controllers\Alumnos($app, $db))->cursos($id);
     });
+
+     $app->get('/:id/asistencia_curso/:curso_id/', function($id, $curso_id) use ($app, $db) {
+        (new \Controllers\Alumnos($app, $db))->asistencia($id, $curso_id);
+    });
 });
 
 
