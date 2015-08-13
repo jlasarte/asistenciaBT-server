@@ -41,6 +41,9 @@ class Alumnos extends Controller {
 	            'id' => $usuario['id'],
 	            'nombre' => $usuario['nombre'],
 	            'descripcion' => $usuario['apellido'],
+				'legajo' => $usuario['legajo'],
+				'device_address' => $usuario['device_address'],
+				'nombreusuario' => $usuario['nombreusuario'],
 	        ));
 	    } else {
 	        echo json_encode(array(
