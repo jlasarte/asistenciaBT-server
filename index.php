@@ -5,6 +5,10 @@ require 'Slim/Slim.php';
 require 'plugins/NotORM.php';
 require 'plugins/Spyc.php';
 
+include_once 'controllers/controller.php';
+include_once 'controllers/alumnos.php';
+include_once 'controllers/cursos.php';
+
 $config = Spyc::YAMLLoad('config.yaml');
 
 $dsn = $config["db"]["method"].$config["db"]["name"].";charset=".$config["db"]["charset"];
@@ -24,11 +28,13 @@ $app->get('/', function(){
 $app->group('/cursos', function() use ($app, $db) {
 
     $app->get('/', function() use($app, $db){
-    (new \Controllers\Cursos($app, $db))->index();
+		$courseController=(new \Controllers\Cursos($app, $db));
+		$courseController->index();
     });
 
     $app->get('/:id', function($id) use ($app, $db) {
-        (new \Controllers\Cursos($app, $db))->view($id);
+        $courseController=(new \Controllers\Cursos($app, $db));
+		$courseController->view($id);
     });
 });
 
@@ -39,13 +45,19 @@ $app->group('/alumnos', function() use ($app, $db) {
     $app->get('/', function() use($app, $db){
         echo 'lista de alumnos';
     });
-
+	
+	$app->get('/:id', function($id) use($app, $db){
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->view($id);
+    });
     $app->get('/:id/cursos', function($id) use ($app, $db) {
-        (new \Controllers\Alumnos($app, $db))->cursos($id);
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->cursos($id);
     });
 
      $app->get('/:id/asistencia_curso/:curso_id/', function($id, $curso_id) use ($app, $db) {
-        (new \Controllers\Alumnos($app, $db))->asistencia($id, $curso_id);
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->asistencia($id, $curso_id);
     });
 });
 

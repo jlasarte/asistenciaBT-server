@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+include_once 'controllers/controller.php';
+
 class Cursos extends Controller {
 
 	function  index() {

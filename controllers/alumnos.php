@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+include_once 'controllers/controller.php';
+
 class Alumnos extends Controller {
 
 	function cursos($id) {
@@ -19,19 +21,33 @@ class Alumnos extends Controller {
 	        echo json_encode(array(
 	            'id' => $usuario['id'],
 	            'nombre' => $usuario['nombre'],
-	            'descripccion' => $usuario['apellido'],
+	            'descripcion' => $usuario['apellido'],
 	            'cursos' => $cursos
 	        ));
 	    } else {
 	        echo json_encode(array(
 	            'status' => false,
-	            'message' => "El curso $id no existe"
+	            'message' => "El alumno $id no existe"
 	        ));
     	}
 	}
 
 	function view($id) {
-
+		$this->app->response()->header("Content-Type", "application/json");
+		$usuario = $this->db->usuario[$id];
+		
+		if($data = $usuario->fetch()){
+	        echo json_encode(array(
+	            'id' => $usuario['id'],
+	            'nombre' => $usuario['nombre'],
+	            'descripcion' => $usuario['apellido'],
+	        ));
+	    } else {
+	        echo json_encode(array(
+	            'status' => false,
+	            'message' => "El alumno $id no existe"
+	        ));
+    	}
 	}
 
 	function asistencia($id,$curso_id) {
