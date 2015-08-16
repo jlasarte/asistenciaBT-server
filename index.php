@@ -59,6 +59,12 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->asistencia($id, $curso_id);
     });
+	
+	$app->post('/registro/', function($nombre,$apellido,$legajo,$device_address,$username) use($app, $db){
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->registrarAlumno($nombre,$apellido,$legajo,$device_address,$username);
+    });
+	
 });
 
 

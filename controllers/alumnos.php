@@ -36,11 +36,11 @@ class Alumnos extends Controller {
 		$this->app->response()->header("Content-Type", "application/json");
 		$usuario = $this->db->usuario[$id];
 		
-		if($data = $usuario->fetch()){
+		if($usuario!=null){
 	        echo json_encode(array(
 	            'id' => $usuario['id'],
 	            'nombre' => $usuario['nombre'],
-	            'descripcion' => $usuario['apellido'],
+	            'apellido' => $usuario['apellido'],
 				'legajo' => $usuario['legajo'],
 				'device_address' => $usuario['device_address'],
 				'nombreusuario' => $usuario['nombreusuario'],
@@ -80,6 +80,30 @@ class Alumnos extends Controller {
     	}
 	}
 
+	function registrarAlumno($nombre,$apellido,$legajo,$device_address,$username){
+		//parametros para despues: $nombre,$apellido,$legajo,$device_address,$username
+		$this->app->response()->header("Content-Type", "application/json");
+		$newStudent=array(
+	        'id' => null,// auto increment
+	        'nombre' => "John",
+	        'apellido' => "Locke",
+			'legajo' => "12345/6",
+			'device_address' => "AA:00:00:AA:00:AA",
+			'nombreusuario' => "test_user_4",
+		);
+		$row = $this->db->usuario()->insert($newStudent);
+		if($row){
+			echo json_encode(array(
+	        'status' => true,
+	        'message' => "alumno insertado",
+			));
+		} else {
+			echo json_encode(array(
+	        'status' => false,
+	        'message' => "Error en la creaci&oacute;n",
+			));
+		}
+	}
 }
 
 ?>
