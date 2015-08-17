@@ -80,6 +80,22 @@ class Alumnos extends Controller {
     	}
 	}
 
+	function checkname($nombre) {
+		$this->app->response()->header("Content-Type", "application/json");
+		$usuario = $this->db->usuario()->where("nombreusuario", $nombre);
+		if ($usuario->fetch()) {
+			echo json_encode(array(
+	        'free' => false,
+	        'message' => 'El nombre no está disponible',
+			));
+		} else {
+			echo json_encode(array(
+	        'free' => true,
+	        'message' => 'El nombre está disponible',
+			));
+		}
+	}
+
 	function registrarAlumno($nombre,$apellido,$legajo,$device_address,$username){
 		//parametros para despues: $nombre,$apellido,$legajo,$device_address,$username
 		$this->app->response()->header("Content-Type", "application/json");
