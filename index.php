@@ -60,9 +60,25 @@ $app->group('/alumnos', function() use ($app, $db) {
 		$userController->asistencia($id, $curso_id);
     });
 	
-	$app->post('/registro/', function($nombre,$apellido,$legajo,$device_address,$username) use($app, $db){
-        $userController=(new \Controllers\Alumnos($app, $db));
-		$userController->registrarAlumno($nombre,$apellido,$legajo,$device_address,$username);
+	$app->post('/registro/', function() use($app, $db){
+        try {
+            // get and decode JSON request body
+            $request = $app->request();
+            $body = $request->getBody();
+            $input = json_decode($body);             
+           
+			$userController=(new \Controllers\Alumnos($app, $db));
+			$userController->registrarAlumno((string)$input->nombre,
+												(string)$input->apellido,
+												(string)$input->legajo,
+												(string)$input->device_address,
+												(string)$input->username);
+			
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
     });
 	
 });

@@ -85,22 +85,22 @@ class Alumnos extends Controller {
 		$this->app->response()->header("Content-Type", "application/json");
 		$newStudent=array(
 	        'id' => null,// auto increment
-	        'nombre' => "John",
-	        'apellido' => "Locke",
-			'legajo' => "12345/6",
-			'device_address' => "AA:00:00:AA:00:AA",
-			'nombreusuario' => "test_user_4",
+	        'nombre' => $nombre,
+	        'apellido' => $apellido,
+			'legajo' => $legajo,
+			'device_address' => $device_address,
+			'nombreusuario' => $username,
 		);
 		$row = $this->db->usuario()->insert($newStudent);
 		if($row){
 			echo json_encode(array(
 	        'status' => true,
-	        'message' => "alumno insertado",
+	        'message' => 'alumno insertado',
 			));
 		} else {
 			echo json_encode(array(
 	        'status' => false,
-	        'message' => "Error en la creaci&oacute;n",
+	        'message' => 'Error en la creaci&oacute;n',
 			));
 		}
 	}
