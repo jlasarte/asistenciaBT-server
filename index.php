@@ -36,6 +36,30 @@ $app->group('/cursos', function() use ($app, $db) {
         $courseController=(new \Controllers\Cursos($app, $db));
 		$courseController->view($id);
     });
+	
+	 $app->get('/checkname/:name', function($name) use ($app, $db) {
+        $courseController=(new \Controllers\Alumnos($app, $db));
+        $courseController->checkname($name);
+    });
+	
+	$app->post('/alta', function() use($app, $db){
+        try {
+            // get and decode JSON request body
+            $request = $app->request();
+            $body = $request->getBody();
+            $input = json_decode($body);             
+           
+			$courseController=(new \Controllers\Cursos($app, $db));
+			$courseController->crearCurso((string)$input->nombre,
+											(string)$input->descripcion,
+											(string)$input->horarios,
+											(string)$input->usuario_id);	//id del owner
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
+    });
 });
 
 
@@ -86,6 +110,13 @@ $app->group('/alumnos', function() use ($app, $db) {
           }
 
     });
+	
+	$app->get('/:id/marcar_presente/:clase_id/', function($id, $clase_id) use($app, $db){         
+           
+			$userController=(new \Controllers\Alumnos($app, $db));
+			$userController->marcarPresente($id, $clase_id);
+
+    });	
 	
 });
 

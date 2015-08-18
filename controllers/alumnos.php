@@ -97,7 +97,6 @@ class Alumnos extends Controller {
 	}
 
 	function registrarAlumno($nombre,$apellido,$legajo,$device_address,$username){
-		//parametros para despues: $nombre,$apellido,$legajo,$device_address,$username
 		$this->app->response()->header("Content-Type", "application/json");
 		$newStudent=array(
 	        'id' => null,// auto increment
@@ -116,7 +115,44 @@ class Alumnos extends Controller {
 		} else {
 			echo json_encode(array(
 	        'status' => false,
-	        'message' => 'Error en la creaci&oacute;n',
+	        'message' => 'Error en la creación',
+			));
+		}
+	}
+	
+		function marcarPresente($usuario_id,$clase_id){		//Crea una asistencia en estado "presente" para el usuario en la clase dada
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$existe = $this->db->asistencia()->where(array("usuario_id" => $usuario_id, "clase_id" => $clase_id));
+		
+		if ($existe->fetch()){
+			$data = array(
+				"estado_asistencia_id" => "2"
+			);
+		$row = $existe->update($data);
+			
+		}else{
+			
+			$newAttendance=array(
+					'id' => null,// auto increment
+					'usuario_id' => $usuario_id,
+					'clase_id' => $clase_id,
+					'estado_asistencia_id' => '2'		//Le pone presente
+				);	
+				
+			$row=$this->db->asistencia()->insert($newAttendance);
+			
+		}
+		
+		if($row){
+				echo json_encode(array(
+				'status' => true,
+				'message' => 'asistencia registrada',
+				));
+		} else {
+			echo json_encode(array(
+			'status' => false,
+			'message' => 'Error en el guardado de la asistencia',
 			));
 		}
 	}
