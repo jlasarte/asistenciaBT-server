@@ -37,7 +37,7 @@ $app->group('/cursos', function() use ($app, $db) {
 		$courseController->view($id);
     });
 	
-	 $app->get('/checkname/:name', function($name) use ($app, $db) {
+	 $app->get('/checkname/:name', function($name) use ($app, $db) {	//Verificar si existe un curso con nombre "name"
         $courseController=(new \Controllers\Alumnos($app, $db));
         $courseController->checkname($name);
     });
@@ -74,17 +74,17 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->view($id);
     });
-    $app->get('/:id/cursos', function($id) use ($app, $db) {
+    $app->get('/:id/cursos', function($id) use ($app, $db) {		//los cursos a los que está incripto el usuario del id
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->cursos($id);
     });
 
-     $app->get('/:id/asistencia_curso/:curso_id/', function($id, $curso_id) use ($app, $db) {
+     $app->get('/:id/asistencia_curso/:curso_id/', function($id, $curso_id) use ($app, $db) {	//asistencia de un usuario a un curso
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->asistencia($id, $curso_id);
     });
 
-    $app->get('/checkname/:name', function($name) use ($app, $db) {
+    $app->get('/checkname/:name', function($name) use ($app, $db) {		//verificar si esta disponible un nombre de usuario
         $userController=(new \Controllers\Alumnos($app, $db));
         $userController->checkname($name);
     });
@@ -111,9 +111,9 @@ $app->group('/alumnos', function() use ($app, $db) {
 
     });
 	
-	$app->get('/:id/marcar_presente/:clase_id/', function($id, $clase_id) use($app, $db){         
+	$app->get('/:id/marcar_presente/:clase_id/', function($id, $clase_id) use($app, $db){		//le pone presente al usuario en una clase
            
-			$userController=(new \Controllers\Alumnos($app, $db));
+			$userController=(new \Controllers\Alumnos($app, $db));				//si no existe, crea la asistencia. Si esta como ausente, lo pasa a presente
 			$userController->marcarPresente($id, $clase_id);
 
     });	
