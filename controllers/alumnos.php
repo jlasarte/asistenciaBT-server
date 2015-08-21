@@ -140,7 +140,7 @@ class Alumnos extends Controller {
 		
 		if ($existe->fetch()){
 			$data = array(
-				"estado_asistencia_id" => "3"
+				"estado_asistencia_id" => $estado_asistencia_id
 			);
 			$row = $existe->update($data);		
 		}else{			
