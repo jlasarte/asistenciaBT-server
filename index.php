@@ -42,7 +42,7 @@ $app->group('/cursos', function() use ($app, $db) {
         $courseController->checkname($name);
     });
 	
-	$app->post('/alta', function() use($app, $db){
+	$app->post('/alta', function() use($app, $db){		//dar de alta un nuevo curso
         try {
             // get and decode JSON request body
             $request = $app->request();
@@ -111,10 +111,16 @@ $app->group('/alumnos', function() use ($app, $db) {
 
     });
 	
-	$app->get('/:id/marcar_presente/:clase_id/', function($id, $clase_id) use($app, $db){		//le pone presente al usuario en una clase
-           
+	$app->get('/:id/marcar_presente/:clase_id/', function($id, $clase_id) use($app, $db){		//le pone presente al usuario en una clase    
 			$userController=(new \Controllers\Alumnos($app, $db));				//si no existe, crea la asistencia. Si esta como ausente, lo pasa a presente
 			$userController->marcarPresente($id, $clase_id);
+
+    });	
+	
+	
+	$app->get('/:id/marcar_justificada/:clase_id/', function($id, $clase_id) use($app, $db){		//le pone estado "J" al usuario en una clase    
+		$userController=(new \Controllers\Alumnos($app, $db));				//si no existe, crea la asistencia. Si esta como ausente, lo pasa a Justificada
+		$userController->marcarJustificada($id, $clase_id);
 
     });	
 	

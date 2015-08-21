@@ -120,28 +120,37 @@ class Alumnos extends Controller {
 		}
 	}
 	
-		function marcarPresente($usuario_id,$clase_id){		//Crea una asistencia en estado "presente" para el usuario en la clase dada
+	function marcarPresente($usuario_id,$clase_id){		//Crea una asistencia en estado "presente" para el usuario en la clase dada
+														//o si ya existe, le cambie el estado a "presente"
 		$this->app->response()->header("Content-Type", "application/json");
 		
+		$this->modificarAsistencia($usuario_id,$clase_id,'2');
+		
+	}
+	
+	function marcarJustificada($usuario_id,$clase_id){			//Le pone estado "J" a la asistencia dada. Si esta no existe, se la genera.				
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$this->modificarAsistencia($usuario_id,$clase_id,'3');
+		
+	}
+	
+	function modificarAsistencia($usuario_id, $clase_id, $estado_asistencia_id){	//Este método no se llama desde afuera
 		$existe = $this->db->asistencia()->where(array("usuario_id" => $usuario_id, "clase_id" => $clase_id));
 		
 		if ($existe->fetch()){
 			$data = array(
-				"estado_asistencia_id" => "2"
+				"estado_asistencia_id" => "3"
 			);
-		$row = $existe->update($data);
-			
-		}else{
-			
+			$row = $existe->update($data);		
+		}else{			
 			$newAttendance=array(
 					'id' => null,// auto increment
 					'usuario_id' => $usuario_id,
 					'clase_id' => $clase_id,
-					'estado_asistencia_id' => '2'		//Le pone presente
-				);	
-				
-			$row=$this->db->asistencia()->insert($newAttendance);
-			
+					'estado_asistencia_id' => $estado_asistencia_id,
+				);					
+			$row=$this->db->asistencia()->insert($newAttendance);			
 		}
 		
 		if($row){
