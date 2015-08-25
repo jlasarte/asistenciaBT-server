@@ -60,6 +60,25 @@ $app->group('/cursos', function() use ($app, $db) {
           }
 
     });
+	
+	$app->post('/generarClase', function() use($app, $db){		//generar una clase para un curso
+        try {
+            // get and decode JSON request body
+            $request = $app->request();
+            $body = $request->getBody();
+            $input = json_decode($body);             
+           
+			$courseController=(new \Controllers\Cursos($app, $db));
+			$courseController->generarClase((string)$input->curso_id,
+											(string)$input->fecha,
+											(string)$input->hora_inicio,
+											(string)$input->hora_fin,
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
+    });
 });
 
 

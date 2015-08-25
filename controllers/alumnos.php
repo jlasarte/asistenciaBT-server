@@ -32,7 +32,7 @@ class Alumnos extends Controller {
     	}
 	}
 
-	function view($id) {
+	function view($id) {	//obtiene los datos del usuario by id
 		$this->app->response()->header("Content-Type", "application/json");
 		$usuario = $this->db->usuario[$id];
 		
@@ -53,7 +53,7 @@ class Alumnos extends Controller {
     	}
 	}
 
-	function asistencia($id,$curso_id) {
+	function asistencia($id,$curso_id) {	//obtiene la asistencia para un user_id
 		$this->app->response()->header("Content-Type", "application/json");
 		$usuario = $this->db->usuario[$id];
 		if ($data = $usuario->fetch()) {
@@ -80,7 +80,7 @@ class Alumnos extends Controller {
     	}
 	}
 
-	function checkname($nombre) {
+	function checkname($nombre) {	//se fija que el nombreusuario esté disponible o no
 		$this->app->response()->header("Content-Type", "application/json");
 		$usuario = $this->db->usuario()->where("nombreusuario", $nombre);
 		if ($usuario->fetch()) {
@@ -96,7 +96,7 @@ class Alumnos extends Controller {
 		}
 	}
 
-	function registrarAlumno($nombre,$apellido,$legajo,$device_address,$username){
+	function registrarAlumno($nombre,$apellido,$legajo,$device_address,$username){		//almacenar un usuario nuevo (no chequea que ya exista)
 		$this->app->response()->header("Content-Type", "application/json");
 		$newStudent=array(
 	        'id' => null,// auto increment
@@ -153,9 +153,9 @@ class Alumnos extends Controller {
 			$row=$this->db->asistencia()->insert($newAttendance);			
 		}
 		
-		if($row){
+		if($row or $existe){
 				echo json_encode(array(
-				'status' => true,
+				'status' => true,	
 				'message' => 'asistencia registrada',
 				));
 		} else {
@@ -165,6 +165,7 @@ class Alumnos extends Controller {
 			));
 		}
 	}
+
 }
 
 ?>

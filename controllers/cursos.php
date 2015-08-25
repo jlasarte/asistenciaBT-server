@@ -87,7 +87,7 @@ class Cursos extends Controller {
 		}
 	}
 	
-		function checkname($nombre) {
+	function checkname($nombre) {
 		$this->app->response()->header("Content-Type", "application/json");
 		$curso = $this->db->curso()->where("nombre", $nombre);
 		if ($curso->fetch()) {
@@ -102,7 +102,29 @@ class Cursos extends Controller {
 			));
 		}
 	}
-
+	
+	function generarClase($curso_id,$fecha,$hora_inicio,$hora_fin){				//genera una clase para el curso_id dado
+		$this->app->response()->header("Content-Type", "application/json");
+		$newClass=array(
+	        'id' => null,	//auto incremental
+	        'curso_id' => $curso_id,
+	        'fecha' => $fecha,
+			'hora_inicio' => $hora_inicio,
+			'hora_fin' => $hora_fin,
+		);
+		$row = $this->db->clase()->insert($newClass);
+		if($row){
+			echo json_encode(array(
+	        'status' => true,
+	        'message' => 'clase creada',
+			));
+		} else {
+			echo json_encode(array(
+	        'status' => false,
+	        'message' => 'Error en la creacion',
+			));
+		}
+	}
 }
 
 ?>
