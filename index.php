@@ -163,6 +163,11 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController->check_mac($address);
     });
 	
+	$app->get('/:id/es_profesor/:curso_id', function($id,$curso_id) use ($app, $db) {		//verifica si un usuario es profesor de un curso
+        $userController=(new \Controllers\Alumnos($app, $db));
+        $userController->es_profesor($id,$curso_id);
+    });
+	
 });
 
 

@@ -179,13 +179,13 @@ class Alumnos extends Controller {
 		
 		if($row){
 			echo json_encode(array(
-	        'status' => true,
-	        'message' => 'Alumno inscripto correctamente al curso',
+				'status' => true,
+				'message' => 'Alumno inscripto correctamente al curso',
 			));
 		} else {
 			echo json_encode(array(
-	        'status' => false,
-	        'message' => 'Error en la inscripción',
+				'status' => false,
+				'message' => 'Error en la inscripción',
 			));
 		}
 		
@@ -196,13 +196,33 @@ class Alumnos extends Controller {
 		$direccion = $this->db->usuario()->select("device_address")->where("device_address", $address);
 		if ($direccion->fetch()) {
 			echo json_encode(array(
-	        'free' => false,
-	        'message' => 'la dirección ya está registrada',
+				'free' => false,
+				'message' => 'la dirección ya está registrada',
 			));
 		} else {
 			echo json_encode(array(
-	        'free' => true,
-	        'message' => 'la dirección no ha sidor registrada',
+				'free' => true,
+				'message' => 'la dirección no ha sidor registrada',
+			));
+		}
+	}
+	
+	function es_profesor($usuario_id,$curso_id) {	
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$row = $this->db->curso[$curso_id];
+		
+		echo($row);
+		
+		if ($row["usuario_id"]==$usuario_id) {
+			echo json_encode(array(
+				'status' => true,
+				'message' => 'el usuario es profesor del curso',
+			));
+		} else {
+			echo json_encode(array(
+				'status' => false,
+				'message' => 'el usuario no es profesor del curso',
 			));
 		}
 	}
