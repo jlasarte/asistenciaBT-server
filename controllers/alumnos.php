@@ -82,11 +82,11 @@ class Alumnos extends Controller {
 
 	function checkname($nombre) {	//se fija que el nombreusuario esté disponible o no
 		$this->app->response()->header("Content-Type", "application/json");
-		$usuario = $this->db->usuario()->where("nombreusuario", $nombre);
+		$usuario = $this->db->usuario()->select("nombreusuario")->where("nombreusuario", $nombre);
 		if ($usuario->fetch()) {
 			echo json_encode(array(
 	        'free' => false,
-	        'message' => 'El nombre no está disponible',
+	        'message' => 'El nombre ya ha sido registrado',
 			));
 		} else {
 			echo json_encode(array(
@@ -189,6 +189,22 @@ class Alumnos extends Controller {
 			));
 		}
 		
+	}
+	
+	function check_mac($address) {	
+		$this->app->response()->header("Content-Type", "application/json");
+		$direccion = $this->db->usuario()->select("device_address")->where("device_address", $address);
+		if ($direccion->fetch()) {
+			echo json_encode(array(
+	        'free' => false,
+	        'message' => 'la dirección ya está registrada',
+			));
+		} else {
+			echo json_encode(array(
+	        'free' => true,
+	        'message' => 'la dirección no ha sidor registrada',
+			));
+		}
 	}
 
 }

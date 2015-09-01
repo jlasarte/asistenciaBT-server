@@ -158,6 +158,11 @@ $app->group('/alumnos', function() use ($app, $db) {
 
     });
 	
+	$app->get('/checkmac/:address', function($address) use ($app, $db) {		//verificar si existe una cierta direccion mac bluetooth
+        $userController=(new \Controllers\Alumnos($app, $db));
+        $userController->check_mac($address);
+    });
+	
 });
 
 
