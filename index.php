@@ -27,12 +27,12 @@ $app->get('/', function(){
 
 $app->group('/cursos', function() use ($app, $db) {
 
-    $app->get('/', function() use($app, $db){
+    $app->get('/', function() use($app, $db){	//devuelve todos los cursos
 		$courseController=(new \Controllers\Cursos($app, $db));
 		$courseController->index();
     });
 
-    $app->get('/:id', function($id) use ($app, $db) {
+    $app->get('/:id', function($id) use ($app, $db) {	//devuelve el curso según el id dado
         $courseController=(new \Controllers\Cursos($app, $db));
 		$courseController->view($id);
     });
@@ -63,7 +63,6 @@ $app->group('/cursos', function() use ($app, $db) {
 	
 	$app->post('/generarClase', function() use($app, $db){		//generar una clase para un curso
         try {
-            // get and decode JSON request body
             $request = $app->request();
             $body = $request->getBody();
             $input = json_decode($body);             
@@ -72,7 +71,7 @@ $app->group('/cursos', function() use ($app, $db) {
 			$courseController->generarClase((string)$input->curso_id,
 											(string)$input->fecha,
 											(string)$input->hora_inicio,
-											(string)$input->hora_fin,
+											(string)$input->hora_fin);
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
@@ -121,7 +120,7 @@ $app->group('/alumnos', function() use ($app, $db) {
 												(string)$input->apellido,
 												(string)$input->legajo,
 												(string)$input->device_address,
-												(string)$input->username);
+												(string)$input->nombreusuario);
 			
           } catch (Exception $e) {
             $app->response()->status(400);

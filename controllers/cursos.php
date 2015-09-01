@@ -124,6 +124,23 @@ class Cursos extends Controller {
 	        'message' => 'Error en la creacion',
 			));
 		}
+		$this->generarAsistenciasPendientes($row['id'],$row['curso_id']);	
+	}
+	
+	function generarAsistenciasPendientes($clase_id,$curso_id){		//crea las tuplas en la tabla de asistencias, en estado pendiente
+		$asistencias= array();
+		$inscripciones = $this->db->curso_usuario()->where('curso_id', $curso_id);
+
+		foreach ($inscripciones as $i) {
+	        $asistencias[]  = array(
+	            'usuario_id'=> $i->usuario['id'],
+				'clase_id' 	=> $clase_id,
+				'estado_asistencia_id' => '4',
+	        );
+    	}
+
+		$row = $this->db->asistencia()->insert_multi($asistencias);
+		echo " ", (string)$row , " asistencias pendientes generadas";
 	}
 }
 
