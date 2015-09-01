@@ -165,6 +165,31 @@ class Alumnos extends Controller {
 			));
 		}
 	}
+	
+	
+	function inscribirEnCurso($usuario_id, $curso_id){
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$newInscription=array(
+	        'id' => null,// auto increment
+	        'curso_id' => $curso_id,
+	        'usuario_id' => $usuario_id
+		);
+		$row=$this->db->curso_usuario()->insert($newInscription);
+		
+		if($row){
+			echo json_encode(array(
+	        'status' => true,
+	        'message' => 'Alumno inscripto correctamente al curso',
+			));
+		} else {
+			echo json_encode(array(
+	        'status' => false,
+	        'message' => 'Error en la inscripción',
+			));
+		}
+		
+	}
 
 }
 

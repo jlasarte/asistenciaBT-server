@@ -88,7 +88,7 @@ $app->group('/alumnos', function() use ($app, $db) {
         echo 'lista de alumnos';
     });
 	
-	$app->get('/:id', function($id) use($app, $db){
+	$app->get('/:id', function($id) use($app, $db){				//get alumno by id
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->view($id);
     });
@@ -108,9 +108,8 @@ $app->group('/alumnos', function() use ($app, $db) {
     });
 
 	
-	$app->post('/registro/', function() use($app, $db){
+	$app->post('/registro/', function() use($app, $db){			//registro de un nuevo alumno
         try {
-            // get and decode JSON request body
             $request = $app->request();
             $body = $request->getBody();
             $input = json_decode($body);             
@@ -141,6 +140,23 @@ $app->group('/alumnos', function() use ($app, $db) {
 		$userController->marcarJustificada($id, $clase_id);
 
     });	
+	
+	$app->post('/inscribir_en_curso', function() use($app, $db){			//inscribir a un alumno a un curso pasados por post
+        try {
+            $request = $app->request();
+            $body = $request->getBody();
+            $input = json_decode($body);             
+           
+			$userController=(new \Controllers\Alumnos($app, $db));
+			$userController->inscribirEnCurso((string)$input->usuario_id,
+												(string)$input->curso_id);
+			
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
+    });
 	
 });
 
