@@ -212,8 +212,6 @@ class Alumnos extends Controller {
 		
 		$row = $this->db->curso[$curso_id];
 		
-		echo($row);
-		
 		if ($row["usuario_id"]==$usuario_id) {
 			echo json_encode(array(
 				'status' => true,

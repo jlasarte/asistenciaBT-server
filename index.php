@@ -142,7 +142,7 @@ $app->group('/alumnos', function() use ($app, $db) {
     });	
 	
 	$app->post('/inscribir_en_curso', function() use($app, $db){			//inscribir a un alumno a un curso pasados por post
-        try {
+        try {																//tener en cuenta que no chequea si el usuario ya existe o no
             $request = $app->request();
             $body = $request->getBody();
             $input = json_decode($body);             
