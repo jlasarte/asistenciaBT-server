@@ -92,6 +92,13 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->view($id);
     });
+	
+	
+	$app->get('/mac/:address', function($address) use($app, $db){		//get alumno by Bluetooth MAC address
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->getByMac($address);
+    });
+	
     $app->get('/:id/cursos', function($id) use ($app, $db) {		//los cursos a los que está incripto el usuario del id
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->cursos($id);

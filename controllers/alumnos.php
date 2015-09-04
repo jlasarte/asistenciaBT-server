@@ -52,6 +52,27 @@ class Alumnos extends Controller {
 	        ));
     	}
 	}
+	
+	function getByMac($address) {	//obtiene los datos del usuario by device_address (bluetooth mac)
+		$this->app->response()->header("Content-Type", "application/json");
+		$usuario = $this->db->usuario("device_address = ?", $address)->fetch();
+		
+		if($usuario){
+	        echo json_encode(array(
+	            'id' => $usuario['id'],
+	            'nombre' => $usuario['nombre'],
+	            'apellido' => $usuario['apellido'],
+				'legajo' => $usuario['legajo'],
+				'device_address' => $usuario['device_address'],
+				'nombreusuario' => $usuario['nombreusuario'],
+	        ));
+	    } else {
+	        echo json_encode(array(
+	            'status' => false,
+	            'message' => "El alumno con dirección $address no existe"
+	        ));
+    	}
+	}
 
 	function asistencia($id,$curso_id) {	//obtiene la asistencia para un user_id
 		$this->app->response()->header("Content-Type", "application/json");
@@ -202,7 +223,7 @@ class Alumnos extends Controller {
 		} else {
 			echo json_encode(array(
 				'free' => true,
-				'message' => 'la dirección no ha sidor registrada',
+				'message' => 'la dirección no ha sido registrada',
 			));
 		}
 	}
