@@ -114,7 +114,12 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->asistencia($id, $curso_id);
     });
-
+	
+	$app->get('/:id/esta_presente/:clase_id/', function($id, $clase_id) use ($app, $db) {	//status true/false de un usuario a una clase en particular
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->esta_presente($id, $clase_id);
+    });
+	
     $app->get('/checkname/:name', function($name) use ($app, $db) {		//verificar si esta disponible un nombre de usuario
         $userController=(new \Controllers\Alumnos($app, $db));
         $userController->checkname($name);

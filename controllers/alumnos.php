@@ -125,7 +125,30 @@ class Alumnos extends Controller {
 	        ));
     	}
 	}
-
+	
+	function esta_presente($usuario_id, $clase_id) {	//Se fija si está presente/justif para una clase en particular
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$asistencia = $this->db->asistencia()->select("estado_asistencia_id")->where(array( "usuario_id" => $usuario_id,"clase_id" => $clase_id ) )->fetch();
+		
+		$codigo=$asistencia['estado_asistencia_id'];
+		$status = $this->db->estado_asistencia()->select("estado")->where("id", $codigo)->fetch();
+		$estado = $status['estado'];
+		
+		
+		if ( ($codigo==2)or($codigo==3) ) {
+			echo json_encode(array(
+	        'status' => true,
+	        'message' => "El usuario $usuario_id esta $estado ($codigo) para la clase $clase_id",
+			));
+		} else {
+			echo json_encode(array(
+	        'status' => false,
+	        'message' => "El usuario $usuario_id está  $estado ($codigo) para la clase $clase_id",
+			));
+		}
+	}
+	
 	function checkname($nombre) {	//se fija que el nombreusuario esté disponible o no
 		$this->app->response()->header("Content-Type", "application/json");
 		$usuario = $this->db->usuario()->select("nombreusuario")->where("nombreusuario", $nombre);
