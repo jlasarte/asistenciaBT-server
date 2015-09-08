@@ -31,7 +31,32 @@ class Alumnos extends Controller {
 	        ));
     	}
 	}
-
+	
+	function cursosComoProfesor($usuario_id) {
+		$this->app->response()->header("Content-Type", "application/json");
+    	$usuario = $this->db->usuario[$usuario_id];
+		echo $usuario['nombre'];
+	    if($usuario){
+			$cursos=array();
+			foreach ($this->db->curso()->where("usuario_id", $usuario_id) as $curso){
+				$cursos[]  = array(
+					'id' => $curso['id'],
+					'nombre' => $curso['nombre'],
+					'descripcion' => $curso['descripcion'],
+					'horarios' => $curso['horarios'],
+					'profesor' => $curso->usuario['nombreusuario']
+				);
+			}
+				
+	        echo json_encode($cursos);
+	    } else {
+	        echo json_encode(array(
+	            'status' => false,
+	            'message' => "El alumno $id no existe"
+	        ));
+    	}
+	}
+	
 	function view($id) {	//obtiene los datos del usuario by id
 		$this->app->response()->header("Content-Type", "application/json");
 		$usuario = $this->db->usuario[$id];

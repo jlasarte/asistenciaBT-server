@@ -103,6 +103,12 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController=(new \Controllers\Alumnos($app, $db));
 		$userController->cursos($id);
     });
+	
+	$app->get('/:id/profesor', function($id) use ($app, $db) {		//los cursos en donde el usuario es profesor
+        $userController=(new \Controllers\Alumnos($app, $db));
+		$userController->cursosComoProfesor($id);
+    });
+
 
      $app->get('/:id/asistencia_curso/:curso_id/', function($id, $curso_id) use ($app, $db) {	//asistencia de un usuario a un curso
         $userController=(new \Controllers\Alumnos($app, $db));
