@@ -35,7 +35,7 @@ class Alumnos extends Controller {
 	function cursosComoProfesor($usuario_id) {
 		$this->app->response()->header("Content-Type", "application/json");
     	$usuario = $this->db->usuario[$usuario_id];
-		echo $usuario['nombre'];
+		
 	    if($usuario){
 			$cursos=array();
 			foreach ($this->db->curso()->where("usuario_id", $usuario_id) as $curso){
@@ -154,14 +154,16 @@ class Alumnos extends Controller {
 		);
 		$row = $this->db->usuario()->insert($newStudent);
 		if($row){
+			$insert_id = $this->db->usuario()->insert_id();
 			echo json_encode(array(
-	        'status' => true,
-	        'message' => 'alumno insertado',
-			));
+				'status' => true,
+				'message' => "alumno $insert_id insertado",
+				'id'=> $insert_id
+				));
 		} else {
 			echo json_encode(array(
-	        'status' => false,
-	        'message' => 'Error en la creación',
+				'status' => false,
+				'message' => 'Error en la creación',
 			));
 		}
 	}
