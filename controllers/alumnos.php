@@ -165,12 +165,13 @@ class Alumnos extends Controller {
 		}
 	}
 
-	function registrarAlumno($nombre,$apellido,$legajo,$device_address,$username){		//almacenar un usuario nuevo (no chequea que ya exista)
+	function registrarAlumno($nombre,$apellido,$password,$legajo,$device_address,$username){		//almacenar un usuario nuevo (no chequea que ya exista)
 		$this->app->response()->header("Content-Type", "application/json");
 		$newStudent=array(
 	        'id' => null,// auto increment
 	        'nombre' => $nombre,
 	        'apellido' => $apellido,
+			'password' => hash("sha512",$password),
 			'legajo' => $legajo,
 			'device_address' => $device_address,
 			'nombreusuario' => $username,

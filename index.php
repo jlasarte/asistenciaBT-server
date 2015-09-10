@@ -135,6 +135,7 @@ $app->group('/alumnos', function() use ($app, $db) {
 			$userController=(new \Controllers\Alumnos($app, $db));
 			$userController->registrarAlumno((string)$input->nombre,
 												(string)$input->apellido,
+												(string)$input->password,
 												(string)$input->legajo,
 												(string)$input->device_address,
 												(string)$input->nombreusuario);
