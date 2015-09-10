@@ -139,12 +139,12 @@ class Alumnos extends Controller {
 		if ( ($codigo==2)or($codigo==3) ) {
 			echo json_encode(array(
 	        'status' => true,
-	        'message' => "El usuario $usuario_id esta $estado ($codigo) para la clase $clase_id",
+	        //'message' => "El usuario $usuario_id esta $estado ($codigo) para la clase $clase_id",
 			));
 		} else {
 			echo json_encode(array(
 	        'status' => false,
-	        'message' => "El usuario $usuario_id está  $estado ($codigo) para la clase $clase_id",
+	        //'message' => "El usuario $usuario_id está  $estado ($codigo) para la clase $clase_id",
 			));
 		}
 	}
@@ -181,7 +181,7 @@ class Alumnos extends Controller {
 			$insert_id = $this->db->usuario()->insert_id();
 			echo json_encode(array(
 				'status' => true,
-				'message' => "alumno $insert_id insertado",
+				'message' => "usuario $insert_id insertado",
 				'id'=> $insert_id
 				));
 		} else {
@@ -295,6 +295,27 @@ class Alumnos extends Controller {
 				'message' => 'el usuario no es profesor del curso',
 			));
 		}
+	}
+	
+	function cambiar_mac($usuario_id,$new_address){
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$row = $this->db->usuario[$usuario_id];
+		if ($row){
+			$row["device_address"]=$new_address;
+			$row->update();
+			echo json_encode(array(
+				'status' => true,
+				'message' => "direccion del usuario $usuario_id actualizada",
+			));
+		}else{
+			echo json_encode(array(
+				'status' => false,
+				'message' => "el usuario $usuario_id no existe",
+			));
+			
+		}
+		
 	}
 
 }

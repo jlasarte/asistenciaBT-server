@@ -147,6 +147,23 @@ $app->group('/alumnos', function() use ($app, $db) {
 
     });
 	
+	$app->post('/cambiar_mac/', function() use($app, $db){			//cambio de mac address para un alumno (recibe id del user y new_address)
+        try {
+            $request = $app->request();
+            $body = $request->getBody();
+            $input = json_decode($body);             
+           
+			$userController=(new \Controllers\Alumnos($app, $db));
+			$userController->cambiar_mac((string)$input->id,
+										(string)$input->new_address);
+			
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
+    });
+	
 	$app->get('/:id/marcar_presente/:clase_id/', function($id, $clase_id) use($app, $db){		//le pone presente al usuario en una clase    
 			$userController=(new \Controllers\Alumnos($app, $db));				//si no existe, crea la asistencia. Si esta como ausente, lo pasa a presente
 			$userController->marcarPresente($id, $clase_id);
