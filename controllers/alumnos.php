@@ -194,17 +194,18 @@ class Alumnos extends Controller {
 	
 	function marcarPresente($usuario_id,$clase_id){		//Crea una asistencia en estado "presente" para el usuario en la clase dada
 														//o si ya existe, le cambie el estado a "presente"
-		$this->app->response()->header("Content-Type", "application/json");
-		
-		$this->modificarAsistencia($usuario_id,$clase_id,'2');
-		
+		$this->app->response()->header("Content-Type", "application/json");		
+		$this->modificarAsistencia($usuario_id,$clase_id,'2');	
 	}
 	
 	function marcarJustificada($usuario_id,$clase_id){			//Le pone estado "J" a la asistencia dada. Si esta no existe, se la genera.				
-		$this->app->response()->header("Content-Type", "application/json");
-		
-		$this->modificarAsistencia($usuario_id,$clase_id,'3');
-		
+		$this->app->response()->header("Content-Type", "application/json");		
+		$this->modificarAsistencia($usuario_id,$clase_id,'3');	
+	}
+	
+	function marcarAusente($usuario_id,$clase_id){			//Le pone estado ausente a la asistencia dada. Si esta no existe, se la genera.				
+		$this->app->response()->header("Content-Type", "application/json");		
+		$this->modificarAsistencia($usuario_id,$clase_id,'1');	
 	}
 	
 	function modificarAsistencia($usuario_id, $clase_id, $estado_asistencia_id){	//Este método no se llama desde afuera

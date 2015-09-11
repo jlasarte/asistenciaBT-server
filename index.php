@@ -177,6 +177,12 @@ $app->group('/alumnos', function() use ($app, $db) {
 
     });	
 	
+	$app->get('/:id/marcar_ausente/:clase_id/', function($id, $clase_id) use($app, $db){		//le pone estado ausente al usuario en una clase    
+		$userController=(new \Controllers\Alumnos($app, $db));				//si no existe, crea la asistencia. Si existe, lo pasa a Justificada
+		$userController->marcarAusente($id, $clase_id);
+
+    });	
+	
 	$app->post('/inscribir_en_curso', function() use($app, $db){			//inscribir a un alumno a un curso pasados por post
         try {																//tener en cuenta que no chequea si el usuario ya existe o no
             $request = $app->request();
