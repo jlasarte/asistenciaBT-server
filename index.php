@@ -44,16 +44,14 @@ $app->group('/cursos', function() use ($app, $db) {
 	
 	$app->post('/alta', function() use($app, $db){		//dar de alta un nuevo curso
         try {
-            // get and decode JSON request body
-            $request = $app->request();
-            $body = $request->getBody();
-            $input = json_decode($body);             
+            $request = $app->request();            
            
 			$courseController=(new \Controllers\Cursos($app, $db));
-			$courseController->crearCurso((string)$input->nombre,
-											(string)$input->descripcion,
-											(string)$input->horarios,
-											(string)$input->usuario_id);	//id del owner
+			$courseController->crearCurso($request->post('nombre'),
+											$request->post('descripcion'),
+											$request->post('horarios'),
+											$request->post('usuario_id')	//id del owner
+											);
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
@@ -63,15 +61,14 @@ $app->group('/cursos', function() use ($app, $db) {
 	
 	$app->post('/generarClase', function() use($app, $db){		//generar una clase para un curso
         try {
-            $request = $app->request();
-            $body = $request->getBody();
-            $input = json_decode($body);             
+            $request = $app->request();             
            
 			$courseController=(new \Controllers\Cursos($app, $db));
-			$courseController->generarClase((string)$input->curso_id,
-											(string)$input->fecha,
-											(string)$input->hora_inicio,
-											(string)$input->hora_fin);
+			$courseController->generarClase($request->post('curso_id'),
+											$request->post('fecha'),
+											$request->post('hora_inicio'),
+											$request->post('hora_fin')
+											);
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
@@ -125,20 +122,19 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController->checkname($name);
     });
 
+
 	
 	$app->post('/registro/', function() use($app, $db){			//registro de un nuevo alumno
-        try {
-            $request = $app->request();
-            $body = $request->getBody();
-            $input = json_decode($body);             
-           
+        try {          
+			$request = $app->request();
 			$userController=(new \Controllers\Alumnos($app, $db));
-			$userController->registrarAlumno((string)$input->nombre,
-												(string)$input->apellido,
-												(string)$input->password,
-												(string)$input->legajo,
-												(string)$input->device_address,
-												(string)$input->nombreusuario);
+			$userController->registrarAlumno($request->post('nombre'),
+												$request->post('apellido'),
+												$request->post('password'),
+												$request->post('legajo'),
+												$request->post('device_address'),
+												$request->post('username')
+												);
 			
           } catch (Exception $e) {
             $app->response()->status(400);
@@ -149,13 +145,12 @@ $app->group('/alumnos', function() use ($app, $db) {
 	
 	$app->post('/cambiar_mac/', function() use($app, $db){			//cambio de mac address para un alumno (recibe id del user y new_address)
         try {
-            $request = $app->request();
-            $body = $request->getBody();
-            $input = json_decode($body);             
+            $request = $app->request();             
            
 			$userController=(new \Controllers\Alumnos($app, $db));
-			$userController->cambiar_mac((string)$input->id,
-										(string)$input->new_address);
+			$userController->cambiar_mac($request->post('usuario_id'),
+										$request->post('new_address')
+										);
 			
           } catch (Exception $e) {
             $app->response()->status(400);
@@ -185,19 +180,17 @@ $app->group('/alumnos', function() use ($app, $db) {
 	
 	$app->post('/inscribir_en_curso', function() use($app, $db){			//inscribir a un alumno a un curso pasados por post
         try {																//tener en cuenta que no chequea si el usuario ya existe o no
-            $request = $app->request();
-            $body = $request->getBody();
-            $input = json_decode($body);             
+            $request = $app->request();           
            
 			$userController=(new \Controllers\Alumnos($app, $db));
-			$userController->inscribirEnCurso((string)$input->usuario_id,
-												(string)$input->curso_id);
+			$userController->inscribirEnCurso($request->post('usuario_id'),
+												$request->post('curso_id')
+											);
 			
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
           }
-
     });
 	
 	$app->get('/checkmac/:address', function($address) use ($app, $db) {		//verificar si existe una cierta direccion mac bluetooth
