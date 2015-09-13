@@ -142,6 +142,21 @@ class Cursos extends Controller {
 		$row = $this->db->asistencia()->insert_multi($asistencias);
 		echo " ", (string)$row , " asistencias pendientes generadas";
 	}
+	
+	function resolver_pendientes($clase_id){	//pasa todos los pendientes a ausentes en la clase dada
+		$pendientes= $this->db->asistencia()->where('clase_id',$clase_id);
+		$ausentes = array();
+		foreach ($pendientes as $p){
+			$ausentes['usuario_id']=$p['usuario_id'];
+			$ausentes['estado_asistencia_id']=1;
+		}
+		$pendientes->update($ausentes);
+		echo json_encode(array(
+	        'status' => true,
+	        'message' => "pendientes marcados como ausentes",
+			));
+	
+	}
 }
 
 ?>

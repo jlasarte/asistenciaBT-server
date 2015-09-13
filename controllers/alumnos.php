@@ -6,7 +6,7 @@ include_once 'controllers/controller.php';
 
 class Alumnos extends Controller {
 
-	function cursos($id) {
+	function cursos($id) {						//los cursos a los que está incripto el usuario del id
 		$this->app->response()->header("Content-Type", "application/json");
     	$usuario = $this->db->usuario[$id];
 
@@ -18,12 +18,7 @@ class Alumnos extends Controller {
 		            'nombre'=> $i->curso['nombre'],
 		            );
 		    }
-	        echo json_encode(array(
-	            'id' => $usuario['id'],
-	            'nombre' => $usuario['nombre'],
-	            'descripcion' => $usuario['apellido'],
-	            'cursos' => $cursos
-	        ));
+	        echo json_encode($cursos);
 	    } else {
 	        echo json_encode(array(
 	            'status' => false,
@@ -32,7 +27,7 @@ class Alumnos extends Controller {
     	}
 	}
 	
-	function cursosComoProfesor($usuario_id) {
+	function cursosComoProfesor($usuario_id) {				//devuelve array de cursos donde el usuario es profesor
 		$this->app->response()->header("Content-Type", "application/json");
     	$usuario = $this->db->usuario[$usuario_id];
 		
@@ -144,6 +139,7 @@ class Alumnos extends Controller {
 		} else {
 			echo json_encode(array(
 	        'status' => false,
+			'id' => $codigo,
 	        //'message' => "El usuario $usuario_id está  $estado ($codigo) para la clase $clase_id",
 			));
 		}
@@ -174,6 +170,7 @@ class Alumnos extends Controller {
 			'password' => hash("sha512",$password),
 			'legajo' => $legajo,
 			'device_address' => $device_address,
+			'android_version' => 0,
 			'nombreusuario' => $username,
 		);
 		$row = $this->db->usuario()->insert($newStudent);

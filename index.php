@@ -59,7 +59,7 @@ $app->group('/cursos', function() use ($app, $db) {
 
     });
 	
-	$app->post('/generarClase', function() use($app, $db){		//generar una clase para un curso
+	$app->post('/generar_clase/', function() use($app, $db){		//generar una clase para un curso
         try {
             $request = $app->request();             
            
@@ -69,6 +69,20 @@ $app->group('/cursos', function() use ($app, $db) {
 											$request->post('hora_inicio'),
 											$request->post('hora_fin')
 											);
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
+    });
+	
+	$app->post('/resolver_pendientes/', function() use($app, $db){		//recibe clase_id, pasa todos los pendientes a ausentes
+        try {
+            $request = $app->request();             
+           
+			$courseController=(new \Controllers\Cursos($app, $db));
+			$courseController->resolver_pendientes( $request->post('clase_id') );
+			
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
@@ -134,8 +148,7 @@ $app->group('/alumnos', function() use ($app, $db) {
 												$request->post('legajo'),
 												$request->post('device_address'),
 												$request->post('username')
-												);
-			
+												);			
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
@@ -143,7 +156,7 @@ $app->group('/alumnos', function() use ($app, $db) {
 
     });
 	
-	$app->post('/cambiar_mac/', function() use($app, $db){			//cambio de mac address para un alumno (recibe id del user y new_address)
+	$app->post('/cambiar_mac/', function() use($app, $db){			//cambio de mac address para un alumno (recibe usuario_id y new_address)
         try {
             $request = $app->request();             
            
