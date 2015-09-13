@@ -37,9 +37,14 @@ $app->group('/cursos', function() use ($app, $db) {
 		$courseController->view($id);
     });
 	
-	 $app->get('/checkname/:name', function($name) use ($app, $db) {	//Verificar si existe un curso con nombre "name"
-        $courseController=(new \Controllers\Alumnos($app, $db));
+	$app->get('/checkname/:name', function($name) use ($app, $db) {	//Verificar si existe un curso con nombre "name"
+        $courseController=(new \Controllers\Cursos($app, $db));
         $courseController->checkname($name);
+    });
+	
+	$app->get('/buscar/:name', function($name) use ($app, $db) {	//busqueda de un curso por nombre
+        $courseController=(new \Controllers\Cursos($app, $db));
+        $courseController->buscar($name);
     });
 	
 	$app->post('/alta', function() use($app, $db){		//dar de alta un nuevo curso

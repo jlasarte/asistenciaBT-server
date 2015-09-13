@@ -102,6 +102,24 @@ class Cursos extends Controller {
 			));
 		}
 	}
+
+	function buscar($busqueda) {
+		$this->app->response()->header("Content-Type", "application/json");
+		$resultado = $this->db->curso()->where('nombre LIKE ?', "%$busqueda%");
+		$cursos=array();
+    	foreach ($resultado as $curso) {
+	        $cursos[]  = array(
+	            'id' => $curso['id'],
+	            'nombre' => $curso['nombre'],
+	            'descripcion' => $curso['descripcion'],
+	            'horarios' => $curso['horarios'],
+	            'profesor' => $curso->usuario['nombreusuario']
+	        );
+    	}
+
+	    $this->app->response()->header("Content-Type", "application/json");
+	    echo json_encode($cursos, JSON_FORCE_OBJECT);
+	}
 	
 	function generarClase($curso_id,$fecha,$hora_inicio,$hora_fin){				//genera una clase para el curso_id dado
 		$this->app->response()->header("Content-Type", "application/json");
