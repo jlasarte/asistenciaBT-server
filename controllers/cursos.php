@@ -103,9 +103,9 @@ class Cursos extends Controller {
 		}
 	}
 
-	function buscar($busqueda) {
+	function buscar($usuario_id,$busqueda) {
 		$this->app->response()->header("Content-Type", "application/json");
-		$resultado = $this->db->curso()->where('nombre LIKE ?', "%$busqueda%");
+		$resultado = $this->db->curso()->where('nombre LIKE ? AND usuario_id <> ?', "%$busqueda%",$usuario_id);
 		$cursos=array();
     	foreach ($resultado as $curso) {
 	        $cursos[]  = array(
@@ -132,14 +132,15 @@ class Cursos extends Controller {
 		);
 		$row = $this->db->clase()->insert($newClass);
 		if($row){
+			$insert_id = $this->db->usuario()->insert_id();
 			echo json_encode(array(
-	        'status' => true,
-	        'message' => 'clase creada',
+				'status' => true,
+				'id'=> $insert_id,
 			));
 		} else {
 			echo json_encode(array(
-	        'status' => false,
-	        'message' => 'Error en la creacion',
+				'status' => false,
+				'message' => 'Error en la creacion',
 			));
 		}
 		$this->generarAsistenciasPendientes($row['id'],$row['curso_id']);	

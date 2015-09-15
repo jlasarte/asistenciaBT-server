@@ -42,9 +42,9 @@ $app->group('/cursos', function() use ($app, $db) {
         $courseController->checkname($name);
     });
 	
-	$app->get('/buscar/:name', function($name) use ($app, $db) {	//busqueda de un curso por nombre
+	$app->get('/buscar/:usuario_id/:name', function($usuario_id,$name) use ($app, $db) {	//busqueda de un curso por nombre
         $courseController=(new \Controllers\Cursos($app, $db));
-        $courseController->buscar($name);
+        $courseController->buscar($usuario_id,$name);
     });
 	
 	$app->post('/alta', function() use($app, $db){		//dar de alta un nuevo curso
