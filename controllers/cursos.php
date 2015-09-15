@@ -121,29 +121,29 @@ class Cursos extends Controller {
 	    echo json_encode($cursos, JSON_FORCE_OBJECT);
 	}
 	
-	function generarClase($curso_id,$fecha,$hora_inicio,$hora_fin){				//genera una clase para el curso_id dado
+	function generarClase($curso_id){				//genera una clase para el curso_id dado
 		$this->app->response()->header("Content-Type", "application/json");
 		$newClass=array(
 	        'id' => null,	//auto incremental
 	        'curso_id' => $curso_id,
-	        'fecha' => $fecha,
-			'hora_inicio' => $hora_inicio,
-			'hora_fin' => $hora_fin,
+	        'fecha' => null,	//se inserta la fecha-hora actual
+
 		);
 		$row = $this->db->clase()->insert($newClass);
 		if($row){
-			$insert_id = $this->db->usuario()->insert_id();
+			$insert_id = $this->db->clase()->insert_id();
 			echo json_encode(array(
 				'status' => true,
 				'id'=> $insert_id,
 			));
+			$this->generarAsistenciasPendientes($insert_id,$row['curso_id']);
 		} else {
 			echo json_encode(array(
 				'status' => false,
 				'message' => 'Error en la creacion',
 			));
 		}
-		$this->generarAsistenciasPendientes($row['id'],$row['curso_id']);	
+			
 	}
 	
 	function generarAsistenciasPendientes($clase_id,$curso_id){		//crea las tuplas en la tabla de asistencias, en estado pendiente
@@ -159,7 +159,7 @@ class Cursos extends Controller {
     	}
 
 		$row = $this->db->asistencia()->insert_multi($asistencias);
-		echo " ", (string)$row , " asistencias pendientes generadas";
+		//echo " ", (string)$row , " asistencias pendientes generadas";
 	}
 	
 	function resolver_pendientes($clase_id){	//pasa todos los pendientes a ausentes en la clase dada
@@ -175,6 +175,25 @@ class Cursos extends Controller {
 	        'message' => "pendientes marcados como ausentes",
 			));
 	
+	}
+	
+	function obtener_clase($curso_id) {
+		$this->app->response()->header("Content-Type", "application/json");
+    	$clase = $this->db->clase()->select("id","fecha")->where(array("curso_id" => $curso_id, "completada" => "0"))
+									->order("fecha")
+									->limit(1)
+									->fetch();
+    	if ($clase){
+			echo json_encode(array(
+				'status' => true,
+				'id'	=> $clase['id'],
+				'fecha' => $clase['fecha'],
+			));
+		}else{
+			echo json_encode(array(
+				'status' => false,
+			));
+		}
 	}
 }
 

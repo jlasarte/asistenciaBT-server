@@ -37,10 +37,18 @@ $app->group('/cursos', function() use ($app, $db) {
 		$courseController->view($id);
     });
 	
+	$app->get('/:id/obtener_clase', function($id) use ($app, $db) {	//status true: devuelve la clase más reciente según el id dado
+        $courseController=(new \Controllers\Cursos($app, $db));		//status false: no hay ninguna clase que no esté finalizada 
+		$courseController->obtener_clase($id);
+    });
+	
+	
 	$app->get('/checkname/:name', function($name) use ($app, $db) {	//Verificar si existe un curso con nombre "name"
         $courseController=(new \Controllers\Cursos($app, $db));
         $courseController->checkname($name);
     });
+	
+
 	
 	$app->get('/buscar/:usuario_id/:name', function($usuario_id,$name) use ($app, $db) {	//busqueda de un curso por nombre
         $courseController=(new \Controllers\Cursos($app, $db));
@@ -69,11 +77,7 @@ $app->group('/cursos', function() use ($app, $db) {
             $request = $app->request();             
            
 			$courseController=(new \Controllers\Cursos($app, $db));
-			$courseController->generarClase($request->post('curso_id'),
-											$request->post('fecha'),
-											$request->post('hora_inicio'),
-											$request->post('hora_fin')
-											);
+			$courseController->generarClase( $request->post('curso_id') );
           } catch (Exception $e) {
             $app->response()->status(400);
             $app->response()->header('X-Status-Reason', $e->getMessage());
