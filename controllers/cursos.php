@@ -105,7 +105,11 @@ class Cursos extends Controller {
 
 	function buscar($usuario_id,$busqueda) {
 		$this->app->response()->header("Content-Type", "application/json");
-		$resultado = $this->db->curso()->where('nombre LIKE ? AND usuario_id <> ?', "%$busqueda%",$usuario_id);
+		
+		$resultado = $this->db->curso()->where('nombre LIKE ? AND usuario_id <> ?', "%$busqueda%" , $usuario_id );	//busca sin los cursos donde sea profesor
+		
+		$resultado->where('NOT id',$this->db->curso_usuario()->select('curso_id')->where('usuario_id',$usuario_id));  //Filtra los cursos donde es alumno
+
 		$cursos=array();
     	foreach ($resultado as $curso) {
 	        $cursos[]  = array(

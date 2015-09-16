@@ -248,9 +248,11 @@ class Alumnos extends Controller {
 		$row=$this->db->curso_usuario()->insert($newInscription);
 		
 		if($row){
+			$insert_id = $this->db->curso_usuario()->insert_id();
 			echo json_encode(array(
 				'status' => true,
 				'message' => 'Alumno inscripto correctamente al curso',
+				'id' => $insert_id,
 			));
 		} else {
 			echo json_encode(array(
