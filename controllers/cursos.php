@@ -199,6 +199,19 @@ class Cursos extends Controller {
 			));
 		}
 	}
+	
+	function marcar_completada($clase_id){	//marca una clase como completada 
+		$this->resolver_pendientes($clase_id);
+		$clase= $this->db->clase()->where('id',$clase_id)->fetch();
+		$clase['completada']=1;
+		$clase->update();
+		echo json_encode(array(
+	        'status' => true,
+	        //'message' => "clase $clase_id marcada como completada",
+		));
+	
+	}
+	
 }
 
 ?>

@@ -98,6 +98,20 @@ $app->group('/cursos', function() use ($app, $db) {
           }
 
     });
+	
+	$app->post('/marcar_completada/', function() use($app, $db){		//marca una clase como completada
+        try {
+            $request = $app->request();             
+           
+			$courseController=(new \Controllers\Cursos($app, $db));
+			$courseController->marcar_completada($request->post('clase_id') );
+			
+          } catch (Exception $e) {
+            $app->response()->status(400);
+            $app->response()->header('X-Status-Reason', $e->getMessage());
+          }
+
+    });
 });
 
 
