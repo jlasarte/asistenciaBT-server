@@ -12,10 +12,17 @@ class Alumnos extends Controller {
 
 	    if($usuario){
     		$cursos = array();
-		    foreach ($usuario->curso_usuario() as $i) {
+		    foreach ($usuario->curso_usuario() as $inscripcion) {
 		        $cursos[] = array(
-		            'id'=> $i->curso['id'],
-		            'nombre'=> $i->curso['nombre'],
+		            'id'=> $inscripcion->curso['id'],
+		            'nombre'=> $inscripcion->curso['nombre'],
+					'descripcion'=>$inscripcion->curso['descripcion'],
+					'horarios'=>$inscripcion->curso['horarios'],
+					'id_profesor'=>$inscripcion->curso['usuario_id'],
+					'address_profesor'=>$inscripcion->usuario['device_address'],
+					'nombre_profesor'=>$inscripcion->usuario['nombre'],
+					'apellido_profesor'=>$inscripcion->usuario['apellido'],
+					'usuario_profesor'=>$inscripcion->usuario['nombreusuario'],
 		            );
 		    }
 	        echo json_encode($cursos);
