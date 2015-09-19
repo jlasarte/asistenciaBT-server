@@ -239,6 +239,11 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController->es_profesor($id,$curso_id);
     });
 	
+	$app->get('/:id/es_profesor', function($id) use ($app, $db) {		//true/false si un usuario está definido como profesor en la db, 
+        $userController=(new \Controllers\Alumnos($app, $db));					//sin chequear por ningún curso en particular
+        $userController->usuario_es_profesor($id);
+    });
+	
 });
 
 

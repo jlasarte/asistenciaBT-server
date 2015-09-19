@@ -191,7 +191,7 @@ class Alumnos extends Controller {
 		} else {
 			echo json_encode(array(
 				'status' => false,
-				'message' => 'Error en la creación',
+				'message' => 'Error en la creación. Motivo: coming soon (?',
 			));
 		}
 	}
@@ -324,6 +324,25 @@ class Alumnos extends Controller {
 		}
 		
 	}
+	
+	function usuario_es_profesor($usuario_id) {	
+		$this->app->response()->header("Content-Type", "application/json");
+		
+		$user = $this->db->usuario()->where('id',$usuario_id)->where('profesor',"1");
+		
+		if ($user->fetch()) {
+			echo json_encode(array(
+				'status' => true,
+				'message' => 'el usuario está definido como profesor',
+			));
+		} else {
+			echo json_encode(array(
+				'status' => false,
+				'message' => 'el usuario no es profesor',
+			));
+		}
+	}
+	
 
 }
 
