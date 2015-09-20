@@ -112,9 +112,13 @@ class Cursos extends Controller {
 
 		$cursos=array();
     	foreach ($resultado as $curso) {
+			$nom=$curso['nombre'];
+			if(strlen($nom)>29){
+					$nom=substr($curso['nombre'],0,29) . "..."; 	//corta el string para que no sature la vista
+				}
 	        $cursos[]  = array(
 	            'id' => $curso['id'],
-	            'nombre' => $curso['nombre'],
+	            'nombre' => $nom,	
 	            'descripcion' => $curso['descripcion'],
 	            'horarios' => $curso['horarios'],
 	            'profesor' => $curso->usuario['nombreusuario']

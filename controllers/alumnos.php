@@ -191,7 +191,7 @@ class Alumnos extends Controller {
 		} else {
 			echo json_encode(array(
 				'status' => false,
-				'message' => 'Error en la creación. Motivo: coming soon (?',
+				'message' => 'El usuario o el dispositivo ya han sido registrados',
 			));
 		}
 	}
@@ -233,7 +233,7 @@ class Alumnos extends Controller {
 		if($row or $existe){
 				echo json_encode(array(
 				'status' => true,	
-				'message' => 'asistencia registrada',
+				//'message' => 'asistencia registrada',
 				));
 		} else {
 			echo json_encode(array(
@@ -294,12 +294,12 @@ class Alumnos extends Controller {
 		if ($row["usuario_id"]==$usuario_id) {
 			echo json_encode(array(
 				'status' => true,
-				'message' => 'el usuario es profesor del curso',
+				//'message' => 'el usuario es profesor del curso',
 			));
 		} else {
 			echo json_encode(array(
 				'status' => false,
-				'message' => 'el usuario no es profesor del curso',
+				//'message' => 'el usuario no es profesor del curso',
 			));
 		}
 	}
@@ -333,12 +333,12 @@ class Alumnos extends Controller {
 		if ($user->fetch()) {
 			echo json_encode(array(
 				'status' => true,
-				'message' => 'el usuario está definido como profesor',
+				//'message' => 'el usuario está definido como profesor',
 			));
 		} else {
 			echo json_encode(array(
 				'status' => false,
-				'message' => 'el usuario no es profesor',
+				//'message' => 'el usuario no es profesor',
 			));
 		}
 	}
