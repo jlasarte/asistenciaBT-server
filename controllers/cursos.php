@@ -53,6 +53,8 @@ class Cursos extends Controller {
 				'id_profesor' => $profesor['id'],
 				'usuario_profesor' => $profesor['nombreusuario'],
 				'address_profesor' => $profesor['device_address'],
+				'nombre_profesor' => $profesor['nombre'],
+				'apellido_profesor' => $profesor['apellido'],
 	            'alumnos' => $alumnos
 	        ));
 	    } else {
