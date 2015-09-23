@@ -157,7 +157,7 @@ class Cursos extends Controller {
 	}
 	
 	function generarAsistenciasPendientes($clase_id,$curso_id){		//crea las tuplas en la tabla de asistencias, en estado pendiente
-		$asistencias= array();
+		$asistencias= array();										//Este método no se llama desde afuera, por eso no genera json
 		$inscripciones = $this->db->curso_usuario()->where('curso_id', $curso_id);
 
 		foreach ($inscripciones as $i) {
@@ -176,18 +176,18 @@ class Cursos extends Controller {
 		$pendientes= $this->db->asistencia()->where('clase_id',$clase_id);
 		$ausentes = array();
 		foreach ($pendientes as $p){
-			$ausentes['usuario_id']=$p['usuario_id'];
+			//$ausentes['usuario_id']=$p['usuario_id'];
 			$ausentes['estado_asistencia_id']=1;
 		}
 		$pendientes->update($ausentes);
 		echo json_encode(array(
 	        'status' => true,
 	        'message' => "pendientes marcados como ausentes",
-			));
+		));
 	
 	}
 	
-	function obtener_clase($curso_id) {
+	function obtener_clase($curso_id) {		//devuelve la clase más reciente
 		$this->app->response()->header("Content-Type", "application/json");
     	$clase = $this->db->clase()->select("id","fecha")->where(array("curso_id" => $curso_id, "completada" => "0"))
 									->order("fecha")
@@ -216,6 +216,48 @@ class Cursos extends Controller {
 	        //'message' => "clase $clase_id marcada como completada",
 		));
 	
+	}
+	
+	function  get_clases($curso_id) {	//devuelve todas las clases para un curso
+		$clases=$this->db->clase()->where('curso_id',$curso_id);
+		$respuesta = array();	
+		foreach ( $clases as $c){
+			$respuesta[]=array(
+				'id' => $c['id'],
+				'fecha' => $c['fecha'],
+			);
+		}
+	    $this->app->response()->header("Content-Type", "application/json");
+	    echo json_encode($respuesta);
+	}
+	
+	function  informacion_clase($clase_id) {
+		$this->app->response()->header("Content-Type", "application/json");
+		$fecha = $this->db->clase('id',$clase_id)->fetch();
+		
+		if ($fecha){
+			$asistencias=$this->db->asistencia()->where('clase_id',$clase_id);
+			$alumnos=array();
+			foreach ($asistencias as $asistencia){
+				$alumnos[]=array(
+					'usuario_id' => $asistencia->usuario["id"],
+					'nombre' => $asistencia->usuario["nombre"],
+					'apellido' => $asistencia->usuario["apellido"],
+					'estado' => $asistencia->estado_asistencia["estado"],
+				);
+			}
+
+			echo json_encode(array(
+				
+				'fecha' => $fecha['fecha'],
+				'alumnos'=> $alumnos,
+			));
+		}else{
+			echo json_encode(array(
+				'status' => false,
+				'message'=> "No existe la clase número $clase_id"
+			));
+		}
 	}
 	
 }

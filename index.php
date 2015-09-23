@@ -112,6 +112,17 @@ $app->group('/cursos', function() use ($app, $db) {
           }
 
     });
+	
+	$app->get('/:id/clases', function($id) use ($app, $db) {		//devuelve todas las clases para un curso
+        $courseController=(new \Controllers\Cursos($app, $db));
+        $courseController->get_clases($id);
+    });
+	
+	$app->get('/clase/:id', function($id) use ($app, $db) {		//devuelve los alumnos y su asistencia para una clase
+        $courseController=(new \Controllers\Cursos($app, $db));
+        $courseController->informacion_clase($id);
+    });
+	
 });
 
 
@@ -243,6 +254,8 @@ $app->group('/alumnos', function() use ($app, $db) {
         $userController=(new \Controllers\Alumnos($app, $db));					//sin chequear por ningún curso en particular
         $userController->usuario_es_profesor($id);
     });
+	
+
 	
 });
 
