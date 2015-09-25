@@ -180,19 +180,27 @@ class Alumnos extends Controller {
 			'android_version' => 0,
 			'nombreusuario' => $username,
 		);
-		$row = $this->db->usuario()->insert($newStudent);
-		if($row){
-			$insert_id = $this->db->usuario()->insert_id();
+		if ($nombre == "" || $apellido == "" || $password=="" || $legajo=="" || $device_address=="" || $username==""){
+			//Se podría chequear con el empty() de php pero chilla con los campos en cero, así acá no sirve
 			echo json_encode(array(
-				'status' => true,
-				'message' => "usuario $insert_id insertado",
-				'id'=> $insert_id
+					'status' => false,
+					'message' => 'Debe completar todos los campos',
 				));
-		} else {
-			echo json_encode(array(
-				'status' => false,
-				'message' => 'El usuario o el dispositivo ya han sido registrados',
-			));
+		}else{
+			$row = $this->db->usuario()->insert($newStudent);
+			if($row){
+				$insert_id = $this->db->usuario()->insert_id();
+				echo json_encode(array(
+					'status' => true,
+					'message' => "usuario $insert_id insertado",
+					'id'=> $insert_id
+					));
+			} else {
+				echo json_encode(array(
+					'status' => false,
+					'message' => 'El usuario o el dispositivo ya han sido registrados',
+				));
+			}
 		}
 	}
 	
