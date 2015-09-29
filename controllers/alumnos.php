@@ -283,12 +283,12 @@ class Alumnos extends Controller {
 		$direccion = $this->db->usuario()->select("device_address")->where("device_address", $address);
 		if ($direccion->fetch()) {
 			echo json_encode(array(
-				'free' => false,
+				'status' => true,
 				'message' => 'la dirección ya está registrada',
 			));
 		} else {
 			echo json_encode(array(
-				'free' => true,
+				'status' => false,
 				'message' => 'la dirección no ha sido registrada',
 			));
 		}

@@ -133,6 +133,9 @@ class Cursos extends Controller {
 	
 	function generarClase($curso_id){				//genera una clase para el curso_id dado
 		$this->app->response()->header("Content-Type", "application/json");
+		
+		$this->cerrar_clases($curso_id);   //cierra las clases anteriores que hayan quedado abiertas
+		
 		$newClass=array(
 	        'id' => null,	//auto incremental
 	        'curso_id' => $curso_id,
@@ -173,7 +176,7 @@ class Cursos extends Controller {
 	}
 	
 	function resolver_pendientes($clase_id){	//pasa todos los pendientes a ausentes en la clase dada
-		$pendientes= $this->db->asistencia()->where('clase_id',$clase_id);
+		$pendientes= $this->db->asistencia()->where('clase_id',$clase_id)->where('estado_asistencia_id',4);
 		$ausentes = array();
 		foreach ($pendientes as $p){
 			//$ausentes['usuario_id']=$p['usuario_id'];
@@ -259,6 +262,19 @@ class Cursos extends Controller {
 			));
 		}
 	}
+	
+	function cerrar_clases($curso_id){	//cierra las clases que estén como no completadas
+		$abiertas= $this->db->clase()->where('curso_id',$curso_id)->where('completada',0);
+		$clases = array();
+		if ($abiertas){
+			foreach ($abiertas as $a){
+				$clases['completada']=1;
+			}
+			$abiertas->update($clases);
+		}
+	
+	}
+	
 	
 }
 
