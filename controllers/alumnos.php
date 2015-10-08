@@ -108,11 +108,15 @@ class Alumnos extends Controller {
 
 			$clases = $this->db->curso[$curso_id]->clase();
 	    	$asistencias_result = array();
-
+			$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+ 
 			foreach ($clases as $clase) {
 				$asistencias = $clase->asistencia()->where('usuario_id', $id);
 				foreach ($asistencias as $a) {
-					$asistencias_result[$clase['fecha']] =  array(
+					$fecha= date_parse($clase['fecha']);
+					$fechaFormateada= $fecha['day'] . " de " . $meses[$fecha['month']-1] . " de " . $fecha['year'];
+					$asistencias_result[] =  array(
+						'fecha' => $fechaFormateada,
 						'estado' => $a->estado_asistencia['estado']
 					);
 				}
@@ -123,7 +127,7 @@ class Alumnos extends Controller {
 		} else {
 	        echo json_encode(array(
 	            'status' => false,
-	            'message' => "El curso $id no existe"
+	            'message' => "El usuario $id no existe"
 	        ));
     	}
 	}
@@ -180,7 +184,7 @@ class Alumnos extends Controller {
 			'android_version' => 0,
 			'nombreusuario' => $username,
 		);
-		if ($nombre == "" || $apellido == "" || $password=="" || $legajo=="" || $device_address=="" || $username==""){
+		if ($nombre == "" || $apellido == "" || $password=="" || $device_address=="" || $username==""){
 			//Se podría chequear con el empty() de php pero chilla con los campos en cero, así acá no sirve
 			echo json_encode(array(
 					'status' => false,
@@ -193,7 +197,8 @@ class Alumnos extends Controller {
 				echo json_encode(array(
 					'status' => true,
 					'message' => "usuario $insert_id insertado",
-					'id'=> $insert_id
+					'id'=> $insert_id,
+					'device_address' => $device_address
 					));
 			} else {
 				echo json_encode(array(

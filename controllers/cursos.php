@@ -57,6 +57,8 @@ class Cursos extends Controller {
 				'apellido_profesor' => $profesor['apellido'],
 	            'alumnos' => $alumnos
 	        ));
+			$this->cerrar_clases_vencidas();
+			
 	    } else {
 	        echo json_encode(array(
 	            'status' => false,
@@ -175,7 +177,7 @@ class Cursos extends Controller {
 		//echo " ", (string)$row , " asistencias pendientes generadas";
 	}
 	
-	function resolver_pendientes($clase_id){	//pasa todos los pendientes a ausentes en la clase dada
+	function resolver_pendientes($clase_id){	//pasa todos los pendientes a ausente en la clase dada
 		$pendientes= $this->db->asistencia()->where('clase_id',$clase_id)->where('estado_asistencia_id',4);
 		$ausentes = array();
 		foreach ($pendientes as $p){
@@ -250,8 +252,7 @@ class Cursos extends Controller {
 				);
 			}
 
-			echo json_encode(array(
-				
+			echo json_encode(array(		
 				'fecha' => $fecha['fecha'],
 				'alumnos'=> $alumnos,
 			));
@@ -265,14 +266,28 @@ class Cursos extends Controller {
 	
 	function cerrar_clases($curso_id){	//cierra las clases que estén como no completadas
 		$abiertas= $this->db->clase()->where('curso_id',$curso_id)->where('completada',0);
-		$clases = array();
 		if ($abiertas){
+			$clases = array();
 			foreach ($abiertas as $a){
 				$clases['completada']=1;
 			}
 			$abiertas->update($clases);
 		}
 	
+	}
+	
+	function cerrar_clases_vencidas(){
+		$clasesAbiertas = $this->db->clase()->where('completada',0);
+		if ($clasesAbiertas){
+			$clases = array();
+			foreach ($clasesAbiertas as $a){
+
+				if( strtotime($a['fecha']) < strtotime('2 hours ago') ){	
+					$clases['completada']=1;
+				}
+			}
+			$clasesAbiertas->update($clases);
+		}
 	}
 	
 	
