@@ -3,6 +3,7 @@
 namespace Controllers;
 
 include_once 'controllers/controller.php';
+include_once './manejo_fechas.php';
 
 class Cursos extends Controller {
 
@@ -72,7 +73,7 @@ class Cursos extends Controller {
 		$this->app->response()->header("Content-Type", "application/json");
 		$newCourse=array(
 	        'id' => null,	//auto incremental
-	        'nombre' => $nombre,
+	        'nombre' => ucfirst($nombre),
 	        'descripcion' => $descripcion,
 			'horarios' => $horarios,
 			'usuario_id' => $usuario_id,	//id del owner
@@ -212,7 +213,6 @@ class Cursos extends Controller {
 	}
 	
 	function marcar_completada($clase_id){	//marca una clase como completada 
-		$this->resolver_pendientes($clase_id);
 		$clase= $this->db->clase()->where('id',$clase_id)->fetch();
 		$clase['completada']=1;
 		$clase->update();
@@ -220,7 +220,7 @@ class Cursos extends Controller {
 	        'status' => true,
 	        //'message' => "clase $clase_id marcada como completada",
 		));
-	
+		$this->resolver_pendientes($clase_id);
 	}
 	
 	function  get_clases($curso_id) {	//devuelve todas las clases para un curso
@@ -229,7 +229,7 @@ class Cursos extends Controller {
 		foreach ( $clases as $c){
 			$respuesta[]=array(
 				'id' => $c['id'],
-				'fecha' => $c['fecha'],
+				'fecha' => fecha_legible($c['fecha']),
 			);
 		}
 	    $this->app->response()->header("Content-Type", "application/json");
@@ -253,7 +253,7 @@ class Cursos extends Controller {
 			}
 
 			echo json_encode(array(		
-				'fecha' => $fecha['fecha'],
+				'fecha' => fecha_legible($fecha['fecha']),
 				'alumnos'=> $alumnos,
 			));
 		}else{

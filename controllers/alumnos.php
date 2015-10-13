@@ -3,6 +3,7 @@
 namespace Controllers;
 
 include_once 'controllers/controller.php';
+include_once './manejo_fechas.php';
 
 class Alumnos extends Controller {
 
@@ -108,15 +109,12 @@ class Alumnos extends Controller {
 
 			$clases = $this->db->curso[$curso_id]->clase();
 	    	$asistencias_result = array();
-			$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
  
 			foreach ($clases as $clase) {
 				$asistencias = $clase->asistencia()->where('usuario_id', $id);
-				foreach ($asistencias as $a) {
-					$fecha= date_parse($clase['fecha']);
-					$fechaFormateada= $fecha['day'] . " de " . $meses[$fecha['month']-1] . " de " . $fecha['year'];
+				foreach ($asistencias as $a) {					
 					$asistencias_result[] =  array(
-						'fecha' => $fechaFormateada,
+						'fecha' => fecha_legible($clase['fecha']),
 						'estado' => $a->estado_asistencia['estado']
 					);
 				}
@@ -175,14 +173,13 @@ class Alumnos extends Controller {
 	function registrarAlumno($nombre,$apellido,$password,$legajo,$device_address,$username){		//almacenar un usuario nuevo (no chequea que ya exista)
 		$this->app->response()->header("Content-Type", "application/json");
 		$newStudent=array(
-	        'id' => null,// auto increment
-	        'nombre' => $nombre,
-	        'apellido' => $apellido,
+	        'nombre' => trim($nombre),		//trim() - Elimina espacio en blanco del inicio y el final del string
+	        'apellido' => trim($apellido),
 			'password' => hash("sha512",$password),
-			'legajo' => $legajo,
+			'legajo' => trim($legajo),
 			'device_address' => $device_address,
 			'android_version' => 0,
-			'nombreusuario' => $username,
+			'nombreusuario' => trim($username)
 		);
 		if ($nombre == "" || $apellido == "" || $password=="" || $device_address=="" || $username==""){
 			//Se podría chequear con el empty() de php pero chilla con los campos en cero, así acá no sirve
